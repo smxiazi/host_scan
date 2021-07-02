@@ -1,6 +1,6 @@
 # host_scan
 
-多线程host碰撞，发现未对外开放站点。
+多线程host碰撞，发现更多资产。
 
 把域名放在host.txt 把ip放在ip.txt，跑出的结果存放在ok.txt里面。
 
