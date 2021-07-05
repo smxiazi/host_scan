@@ -42,7 +42,7 @@ class get_therad(threading.Thread):   #网络请求线程
                 except Exception as e:
                     threadLock.acquire()
                     #print(e)
-                    print('\n访问url异常，url:'+url+'    host:'+host+'    进度:'+str(queues_size*2-queues.qsize()*2)+'/'+str(queues_size))
+                    print('\n访问url异常，url:'+url+'    host:'+host+'    进度:'+str(queues_size-queues.qsize()*2)+'/'+str(queues_size))
                     threadLock.release()
         threadLock.acquire()
         print("退出线程：" + self.name)
