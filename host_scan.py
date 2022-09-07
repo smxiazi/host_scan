@@ -178,5 +178,5 @@ def run_therad(num):# 创建新线程
 
 if __name__ == "__main__":
     print("=====开 始 匹 配=====")
-    run_therad(5) #线程数量
+    run_therad(20) #线程数量
     print( "已处理完成，匹配成功的保存在ok.txt！！！！！" )
