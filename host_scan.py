@@ -103,8 +103,8 @@ class read_file_data(threading.Thread):  #独立线程 加载数据，防止内�
         print('读取文件成功！一共需要碰撞' + str(queues_size) + '次！')
 
 
-        for ip in ip_list:
-            for host in host_list:
+        for host in host_list:
+            for ip in ip_list:
                 queues.put((host, ip))
                 global now_size
                 now_size += 1
