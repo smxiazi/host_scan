@@ -12,7 +12,7 @@ queues_size = 0 #存放总的数量
 now_size = 0 #现在进度
 switch = 1 #开关
 
-
+port_list = [80,443,8080,8888,8000] #端口配置
 
 class get_therad(threading.Thread):   #网络请求线程
     def __init__(self,url_ip,name):
@@ -27,8 +27,9 @@ class get_therad(threading.Thread):   #网络请求线程
         while not self.url_ip.empty():
             url_ips = self.url_ip.get()
             for i in ['http://','https://']:
-                url = i + url_ips[1]
-                host = url_ips[0]
+                url = i + url_ips[1] +":"+ str(url_ips[2])
+                host = url_ips[0]+":"+str(url_ips[2])
+                port = url_ips[2]
                 headers = {
                     'host': '%s'%(host),
                     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36',
@@ -40,12 +41,12 @@ class get_therad(threading.Thread):   #网络请求线程
                     response.encoding = 'utf-8'
                     threadLock.acquire()
                     re_handle(url,host,response.text,response.headers,response.status_code)#url、host、响应体、响应头、响应码
-                    print('\n访问正常：url:'+url+'    host:'+host+'    进度:'+str((now_size-queues.qsize())*2)+'/'+str(queues_size))
+                    print('\n访问正常：url:'+url+'    host:'+host+'    port:'+str(port)+'    进度:'+str((now_size-queues.qsize())*2)+'/'+str(queues_size))
                     threadLock.release()
                 except Exception as e:
                     threadLock.acquire()
                     #print(e)
-                    print('\n访问url异常，url:'+url+'    host:'+host+'    进度:'+str((now_size-queues.qsize())*2)+'/'+str(queues_size))
+                    print('\n访问url异常，url:'+url+'    host:'+host+'    port:'+str(port)+'    进度:'+str((now_size-queues.qsize())*2)+'/'+str(queues_size))
                     threadLock.release()
         threadLock.acquire()
         print("退出线程：" + self.name)
@@ -99,15 +100,16 @@ class read_file_data(threading.Thread):  #独立线程 加载数据，防止内�
                 host_list.append(host)
 
         global queues_size
-        queues_size = (len(ip_list) * len(host_list)) * 2
+        queues_size = (len(ip_list) * len(host_list)) * 2 * len(port_list)
         print('读取文件成功！一共需要碰撞' + str(queues_size) + '次！')
 
 
         for host in host_list:
             for ip in ip_list:
-                queues.put((host, ip))
-                global now_size
-                now_size += 1
+                for i in port_list:
+                    queues.put((host, ip,i))
+                    global now_size
+                    now_size += 1
             while True:
                 if queues.qsize() > self.num*4:
                     global switch
@@ -129,7 +131,7 @@ def re_handle(url,host,data,head,code):    #网页返回内容处理
     if code == 302 or code == 301:
         if 'Location' in head:
             info = (url, host, str(len(data)), str(code) + ':' + head['Location'])
-            print(info, code)
+            print("\n",info, code)
             if '//cas.baidu.com' not in head['location'] and '//www.baidu.com' not in head['location'] and '//m.baidu.com' not in head['location']:
                 info_queue.put(info)
 
