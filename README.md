@@ -7,6 +7,15 @@
 一开始输出（ok.txt）的内容可能都是脏数据，需要更关注后面输出(ok.txt)的那些数据！！！
 
 *********
+## 2024-1-22
+* 添加了自定义端口扫描
+
+<img width="646" alt="image" src="https://github.com/smxiazi/host_scan/assets/30351807/1d60f614-4da5-42b6-9bae-f9bcb225294e">
+
+<img width="1035" alt="image" src="https://github.com/smxiazi/host_scan/assets/30351807/7239badf-bdf7-4b5d-8981-cf5b31d51ba3">
+
+
+*********
 ## 2023-4-21
 * 修改了下逻辑
 
